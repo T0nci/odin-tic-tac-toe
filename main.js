@@ -11,7 +11,6 @@ function createPlayer(name, marker) {
     return {getName, getMarker};
 }
 
-
 // Game Board object - IIFE, the Module Pattern
 const gameBoard = (function() {
     const board = [
@@ -70,56 +69,23 @@ const gameBoard = (function() {
     return {board, getCombinations};
 })();
 
-
 // Game State object - IIFE, the Module Pattern
 const gameState = (function() {
-    const playGame = function() {
-        game: while (true) {
-            printBoard();
+    const playGame = function(playerSpot) {
+        if (!checkSpot(playerSpot)) return "invalid";
 
-            let playerName;
-            if (turn === player1.getMarker()) 
-            playerName = player1.getName();
-            else if (turn === player2.getMarker()) 
-            playerName = player2.getName();
-            
-            let playerSpot;
-            do {
-                playerSpot = prompt(
-                    `${playerName}, select a spot to play in [1-9]:`
-                );
-                if (playerSpot === "cancel") break game; // for testing
-                playerSpot = parseInt(playerSpot) - 1;
-            } while (!checkSpot(playerSpot));
-            gameBoard.board[playerSpot] = turn;
+        gameBoard.board[playerSpot] = turn;
 
-            const winner = checkWinner();
-            if (winner) {
-                printBoard();
-                if (winner === "draw") {
-                    console.log("Draw!");
-                } else {
-                    console.log(
-                        `${winner.getName()} - ${winner.getMarker()} wins!`
-                    );
-                    
-                }
-                break game;
+        const winner = checkWinner();
+        if (winner) {
+            if (winner === "draw") {
+                return "draw";
+            } else {
+                return winner;
             }
-
-            swapTurns();
         }
-    };
 
-
-    const printBoard = function() {
-        console.log(
-`\t${gameBoard.board[0]}\t|\t${gameBoard.board[1]}\t|\t${gameBoard.board[2]}
---------|-------|--------
-\t${gameBoard.board[3]}\t|\t${gameBoard.board[4]}\t|\t${gameBoard.board[5]}
---------|-------|--------
-\t${gameBoard.board[6]}\t|\t${gameBoard.board[7]}\t|\t${gameBoard.board[8]}`
-        );
+        return swapTurns();
     };
 
 
@@ -191,8 +157,14 @@ const gameState = (function() {
 
 
     const swapTurns = function () {
-        if (turn === "X") turn = "O";
-        else if (turn === "O") turn = "X";
+        if (turn === "X") {
+            turn = "O";
+            return "O";
+        }
+        else if (turn === "O") {
+            turn = "X";
+            return "X";
+        }
     };
 
 
@@ -201,24 +173,22 @@ const gameState = (function() {
     return {playGame};
 })();
 
-
-/*const player1 = createPlayer("Player 1", "X");
-const player2 = createPlayer("Player 2", "O");
-
-gameState.playGame();*/
-
-
 const displayController = (function() {
+
     const displayBoard = function() {
+
+        const boardDiv = document.querySelector(".container .board");
+        boardDiv.textContent = ''; // ensure boardDiv is empty
 
         for (let i = 0; i < gameBoard.board.length; i++) {
             const spot = document.createElement("div");
             spot.classList.add("spot");
-            spot.dataset.index = i;
             
             const btn = document.createElement("button");
-            const img = document.createElement("img");
+            btn.dataset.index = i;
+            listenForClicks(btn);
 
+            const img = document.createElement("img");
             if (gameBoard.board[i] === "X") {
                 img.setAttribute("src", "./images/x.svg");
                 img.setAttribute("alt", "X");
@@ -230,13 +200,44 @@ const displayController = (function() {
             }
 
             spot.appendChild(btn);
-            document.querySelector(".container .board").appendChild(spot);
+
+            boardDiv.appendChild(spot);
         }
 
     };
 
+
+    const listenForClicks = function(button) {
+
+        button.addEventListener("click", event => {
+            const index = parseInt(event.currentTarget.dataset.index);
+
+            const result = gameState.playGame(index);
+            if (result === "invalid") return;
+
+            const output = document.querySelector("output");
+
+            if (result === "X")
+            output.textContent = "Turn: X";
+            else if (result === "O")
+            output.textContent = "Turn: O";
+            else if (result === "draw")
+            output.textContent = "Draw!";
+            else
+            output.textContent = 
+            `${result.getMarker()} - ${result.getName()} wins!`;
+
+            displayBoard(); // Display(update) the board after updating it
+        });
+
+    }
+
+
     return {displayBoard};
 })();
 
+
+const player1 = createPlayer("Player 1", "X");
+const player2 = createPlayer("Player 2", "O");
 
 displayController.displayBoard();

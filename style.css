@@ -80,27 +80,42 @@ meter {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 2rem;
 }
 
 .container > .board {
 	width: 500px;
 	height: 500px;
+	background-color: black;
 
 	display: grid;
 	grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+	gap: 0.5rem;
 }
 
 .board > .spot {
-	border: 2px solid;
+	background-color: white;
 }
 
-.spot img,
-.spot button {
-	width: 100%;
-	height: 100%;
+.spot img {
+	width: 90%;
+	height: auto;
 }
 
 .spot > button {
+	width: 100%;
+	height: 100%;
 	border: none;
 	background-color: transparent;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+output {
+	border: 2px solid;
+	font-size: 2rem;
+	width: 50%;
+	padding: 1rem;
 }
