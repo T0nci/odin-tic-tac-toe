@@ -83,7 +83,7 @@ const gameState = (function() {
             else if (turn === player2.getMarker()) 
             playerName = player2.getName();
             
-            let playerSpot = null;
+            let playerSpot;
             do {
                 playerSpot = prompt(
                     `${playerName}, select a spot to play in [1-9]:`
@@ -145,22 +145,29 @@ const gameState = (function() {
             let winnerX = true;
             let winnerO = true;
 
-            boardX.forEach((value, index) => {
-                if (value !== combination[index]) winnerX = false;
-            });
-            if (winnerX === true) return player1;
+            for(let i = 0; i < combination.length; i++) {
+                // this ensures skipping of whitespace and extra Xs or Os
+                if (combination[i] === " ") {
+                    continue;
+                } else {
+                    // if the space is a spot with "w" check if the formatted
+                    // boards don't have "w"(means they are not winners if so)
+                    if (combination[i] !== boardX[i]) winnerX = false;
+                    if (combination[i] !== boardO[i]) winnerO = false;
+                }
+            }
 
-            boardO.forEach((value, index) => {
-                if (value !== combination[index]) winnerO = false;
-            });
-            if (winnerO === true) return player2;
-
+            if (winnerX) return player1;
+            if (winnerO) return player2;
         };
 
         let draw = true;
-        gameBoard.board.forEach(value => {
-            if (value === " ") draw = false;
-        });
+        for (const boardSpot of gameBoard.board) {
+            if (boardSpot === " ") {
+                draw = false;
+                break;
+            }
+        }
         if (draw) return "draw";
 
         return false;
