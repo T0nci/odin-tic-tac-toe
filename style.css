@@ -66,3 +66,41 @@ meter {
 }
 
 /* End Custom reset*/
+
+* {
+	box-sizing: border-box;
+}
+
+.container {
+	max-width: 1100px;
+	min-height: 100vh;
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.container > .board {
+	width: 500px;
+	height: 500px;
+
+	display: grid;
+	grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.board > .spot {
+	border: 2px solid;
+}
+
+.spot img,
+.spot button {
+	width: 100%;
+	height: 100%;
+}
+
+.spot > button {
+	border: none;
+	background-color: transparent;
+}

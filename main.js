@@ -202,7 +202,41 @@ const gameState = (function() {
 })();
 
 
-const player1 = createPlayer("Player 1", "X");
+/*const player1 = createPlayer("Player 1", "X");
 const player2 = createPlayer("Player 2", "O");
 
-gameState.playGame();
+gameState.playGame();*/
+
+
+const displayController = (function() {
+    const displayBoard = function() {
+
+        for (let i = 0; i < gameBoard.board.length; i++) {
+            const spot = document.createElement("div");
+            spot.classList.add("spot");
+            spot.dataset.index = i;
+            
+            const btn = document.createElement("button");
+            const img = document.createElement("img");
+
+            if (gameBoard.board[i] === "X") {
+                img.setAttribute("src", "./images/x.svg");
+                img.setAttribute("alt", "X");
+                btn.appendChild(img);
+            } else if (gameBoard.board[i] == "O") {
+                img.setAttribute("src", "./images/o.svg");
+                img.setAttribute("alt", "O");
+                btn.appendChild(img);
+            }
+
+            spot.appendChild(btn);
+            document.querySelector(".container .board").appendChild(spot);
+        }
+
+    };
+
+    return {displayBoard};
+})();
+
+
+displayController.displayBoard();
