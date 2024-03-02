@@ -209,13 +209,13 @@ const displayController = (function() {
 
     const listenForClicks = function(button) {
 
+        const output = document.querySelector("output");
+
         button.addEventListener("click", event => {
             const index = parseInt(event.currentTarget.dataset.index);
 
             const result = gameState.playGame(index);
             if (result === "invalid") return;
-
-            const output = document.querySelector("output");
 
             if (result === "X")
             output.textContent = "Turn: X";
