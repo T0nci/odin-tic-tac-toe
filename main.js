@@ -63,7 +63,7 @@ const gameBoard = (function() {
     ];
 
     const getCombinations = function() {
-        return winningCombinations;
+        return winningCombinations.slice();
     };
 
     return {board, getCombinations};
@@ -237,7 +237,24 @@ const displayController = (function() {
 })();
 
 
-const player1 = createPlayer("Player 1", "X");
-const player2 = createPlayer("Player 2", "O");
-
 displayController.displayBoard();
+let player1, player2;
+
+
+const dialogStart = document.querySelector("dialog.start");
+const dialogForm = document.querySelector("dialog.start form");
+const player1Name = document.querySelector("#player1");
+const player2Name = document.querySelector("#player2");
+
+dialogStart.showModal();
+dialogStart.addEventListener("keydown", (event) => {
+    // Make sure the user submits the form
+    if (event.key === "Escape") event.preventDefault();
+});
+
+dialogForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    player1 = createPlayer(player1Name.value, "X");
+    player2 = createPlayer(player2Name.value, "O");
+    dialogStart.close();
+});
