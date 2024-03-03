@@ -170,7 +170,16 @@ const gameState = (function() {
 
     let turn = "X";
 
-    return {playGame};
+
+    const reset = function() {
+        turn = "X";
+
+        gameBoard.board.forEach((value, index, arr) => {
+            arr[index] = " ";
+        });
+    }
+
+    return {playGame, reset};
 })();
 
 const displayController = (function() {
@@ -247,6 +256,7 @@ const player1Name = document.querySelector("#player1");
 const player2Name = document.querySelector("#player2");
 
 dialogStart.showModal();
+
 dialogStart.addEventListener("keydown", (event) => {
     // Make sure the user submits the form
     if (event.key === "Escape") event.preventDefault();
@@ -257,4 +267,17 @@ dialogForm.addEventListener("submit", (event) => {
     player1 = createPlayer(player1Name.value, "X");
     player2 = createPlayer(player2Name.value, "O");
     dialogStart.close();
+});
+
+
+const restartButton = document.querySelector("button.restart");
+
+restartButton.addEventListener("click", () => {
+    gameState.reset();
+
+    displayController.displayBoard();
+
+    dialogStart.showModal();
+
+    document.querySelector("output").textContent = "Turn: X";
 });

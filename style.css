@@ -162,7 +162,8 @@ dialog.start {
 	border: 1px solid blue;
 }
 
-.start button[type='submit'] {
+.start button[type='submit'],
+button.restart {
 	width: auto;
 	margin: 0 auto;
 	padding: 0.25rem 0.5rem;
@@ -172,7 +173,17 @@ dialog.start {
 	font-size: 1rem;
 }
 
-.start button[type='submit']:hover {
+button.restart {
+	margin: 0;
+}
+
+.start button[type='submit']:hover,
+button.restart:hover {
 	background-color: #EEEEEE;
 	cursor: pointer;
+}
+
+.start button[type='submit']:active,
+button.restart:active {
+	background-color: #DDDDDD;
 }
